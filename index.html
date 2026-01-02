@@ -1,67 +1,387 @@
-<html>
-  <head>
-    <!-- <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" /> -->
-    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
-  </head>
-  <body>
-    <py-env>
-        - cryptography
-        - paths:
-            - ./log.json
-    </py-env>
-    <h1 id="pi" class="alert alert-primary"></h1>
-    <h1 id="pi2" class="alert alert-primary"></h1>
-    <py-config id ="jsondata" type="json" src="./log.json"></py-config>
-    <py-script>
-        from cryptography.fernet import Fernet
-        import json
-        import os
+<!DOCTYPE html>
+<html lang="en">
 
-        pyscript.write('pi2', os.listdir('./'))
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Manager</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
 
-        input_text = Element("input_text")
-        output_text = Element("output_text")
-        dict = Element("dict")
-        try:
-            with open('./log.json', 'r') as f:
-                data = json.load(f)
-        except:
-            data = jsondata
-        <!-- 현재 저장하고 있는 id 목록들을 보여줌 -->
-        for key in data.keys():
-            print(key)
-        pyscript.write('pi', "여기까지 무사히 옴3")
-        <!-- print(data.item()) -->
-        def function_add_text(*args):
-                <!-- # key, naver, encrypt_text (optional) -->
-            commands = input_text.value.split('/')
-            key = str.encode(commands[0]) + b'uj6xotMc8XTmN8rwDvqK8zoBu6aAQOsHEuM='
-                <!-- print('here1') -->
-                <!-- fernet = Fernet(key) -->
-                <!-- if len(commands) == 2:
-                    print(fernet.decrypt())
-                elif len(commands) == 3:
-                    data[commands[1]] = fernet.encrypt(optional[2]) -->
-            data[commands[0]] = commands[1]
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
 
-            pyscript.write('pi2', "여기까지 무사히 옴2")
-            with open('./log.json', 'w') as f:
-                json.dump(data, f)
-                pyscript.write('pi', data)
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
 
-            pyscript.write('pi2', os.listdir('./'))
+        .keys-section {
+            margin: 30px 0;
+        }
 
-            output_text.element.innerText = '_'.join(commands)
-            input_text.clear()
-        
-            </py-script>
-            <main class = "container">
-                <h1 id = "dict"></h1>
-                <h1 id = "output_text"></h1>
-                <div>
-                  <input id = "input_text" type="text" placeholder="댜니, 뿌꾸, (ㅁㅁㅁ) / key">
-                  <button id = "add_text" pys-onClick ="function_add_text">Click</button>
-                </div> 
-            </main>   
-  </body>
+        .key-list {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .key-item {
+            padding: 8px;
+            margin: 5px 0;
+            background-color: white;
+            border-left: 3px solid #4CAF50;
+            padding-left: 15px;
+        }
+
+        .input-section {
+            margin: 30px 0;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .result.success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            display: block;
+        }
+
+        .result.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            display: block;
+        }
+
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Password Manager</h1>
+
+        <div class="keys-section">
+            <h2>Available Keys</h2>
+            <div id="keyList" class="key-list">
+                <div class="loading">Loading keys...</div>
+            </div>
+        </div>
+
+        <div class="input-section">
+            <h2>Encrypt Value</h2>
+            <div class="input-group">
+                <label for="encryptKeyNameInput">Key Name:</label>
+                <input type="text" id="encryptKeyNameInput" placeholder="Enter key name (e.g., key0, key1)">
+            </div>
+            <div class="input-group">
+                <label for="encryptKeyInput">Encrypt Key (Password):</label>
+                <input type="password" id="encryptKeyInput" placeholder="Enter encryption password">
+            </div>
+            <div class="input-group">
+                <label for="originalValueInput">Original Value:</label>
+                <input type="text" id="originalValueInput" placeholder="Enter value to encrypt">
+            </div>
+            <button onclick="encryptValue()">Encrypt</button>
+
+            <div id="encryptResult" class="result"></div>
+        </div>
+
+        <div class="input-section">
+            <h2>Decrypt Value</h2>
+            <div class="input-group">
+                <label for="keyInput">Key Name:</label>
+                <input type="text" id="keyInput" placeholder="Enter key name (e.g., key0, key1)">
+            </div>
+            <div class="input-group">
+                <label for="decryptKeyInput">Decrypt Key (Password):</label>
+                <input type="password" id="decryptKeyInput" placeholder="Enter decryption password">
+            </div>
+            <button onclick="decryptValue()">Decrypt</button>
+
+            <div id="result" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        let logData = {};
+
+        // Load and display keys from log.json
+        async function loadKeys() {
+            try {
+                const response = await fetch('./log.json');
+                if (!response.ok) {
+                    throw new Error('Failed to load log.json');
+                }
+                logData = await response.json();
+                displayKeys();
+            } catch (error) {
+                document.getElementById('keyList').innerHTML =
+                    '<div class="result error">Error loading log.json: ' + error.message + '</div>';
+            }
+        }
+
+        // Display all keys
+        function displayKeys() {
+            const keyListDiv = document.getElementById('keyList');
+            const keys = Object.keys(logData);
+
+            if (keys.length === 0) {
+                keyListDiv.innerHTML = '<div class="key-item">No keys found</div>';
+                return;
+            }
+
+            keyListDiv.innerHTML = keys.map(key =>
+                `<div class="key-item">${key}</div>`
+            ).join('');
+        }
+
+        // Encrypt value using AES
+        function encryptValue() {
+            const keyName = document.getElementById('encryptKeyNameInput').value.trim();
+            const encryptKey = document.getElementById('encryptKeyInput').value;
+            const originalValue = document.getElementById('originalValueInput').value;
+            const resultDiv = document.getElementById('encryptResult');
+
+            // Clear previous result
+            resultDiv.className = 'result';
+            resultDiv.innerHTML = '';
+
+            // Validate inputs
+            if (!keyName) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = 'Please enter a key name';
+                return;
+            }
+
+            if (!encryptKey) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = 'Please enter an encryption key';
+                return;
+            }
+
+            if (!originalValue) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = 'Please enter an original value to encrypt';
+                return;
+            }
+
+            try {
+                // Encrypt using AES (matching Python format: IV + ciphertext)
+                // Derive key from password using SHA256
+                const key = CryptoJS.SHA256(encryptKey);
+
+                // Generate random IV (16 bytes)
+                const iv = CryptoJS.lib.WordArray.random(16);
+
+                // Encrypt with explicit IV (to match Python format)
+                const encrypted = CryptoJS.AES.encrypt(originalValue, key, {
+                    iv: iv,
+                    mode: CryptoJS.mode.CBC,
+                    padding: CryptoJS.pad.Pkcs7
+                });
+
+                // Format: base64(iv + ciphertext) to match Python
+                const ivWords = iv.words;
+                const ciphertextWords = encrypted.ciphertext.words;
+                const combinedWords = ivWords.concat(ciphertextWords);
+                const combined = CryptoJS.lib.WordArray.create(combinedWords, iv.sigBytes + encrypted.ciphertext.sigBytes);
+                const encryptedString = CryptoJS.enc.Base64.stringify(combined);
+
+                // Update local data
+                logData[keyName] = encryptedString;
+                displayKeys();
+
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = `<strong>Encrypted Value:</strong><br><code style="word-break: break-all;">${encryptedString}</code><br><br><strong>Key Name:</strong> ${keyName}<br><br><small>Note: This is only stored in memory. Use the Python script to update log.json file.</small>`;
+
+                // Clear inputs
+                document.getElementById('encryptKeyNameInput').value = '';
+                document.getElementById('encryptKeyInput').value = '';
+                document.getElementById('originalValueInput').value = '';
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = 'Encryption error: ' + error.message;
+            }
+        }
+
+        // Decrypt value using AES
+        function decryptValue() {
+            const keyName = document.getElementById('keyInput').value.trim();
+            const decryptKey = document.getElementById('decryptKeyInput').value;
+            const resultDiv = document.getElementById('result');
+
+            // Clear previous result
+            resultDiv.className = 'result';
+            resultDiv.innerHTML = '';
+
+            // Validate inputs
+            if (!keyName) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = 'Please enter a key name';
+                return;
+            }
+
+            if (!decryptKey) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = 'Please enter a decryption key';
+                return;
+            }
+
+            // Check if key exists
+            if (!logData.hasOwnProperty(keyName)) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `Key "${keyName}" not found in log.json`;
+                return;
+            }
+
+            try {
+                const encryptedValue = logData[keyName];
+
+                // Validate encrypted value format
+                if (!encryptedValue || typeof encryptedValue !== 'string') {
+                    throw new Error('Invalid encrypted value format');
+                }
+
+                // Decrypt using AES (matching Python format: IV + ciphertext)
+                // Derive key from password using SHA256
+                const key = CryptoJS.SHA256(decryptKey);
+
+                // Parse base64 string
+                let combined;
+                try {
+                    combined = CryptoJS.enc.Base64.parse(encryptedValue);
+                } catch (e) {
+                    throw new Error('Invalid base64 format: ' + e.message);
+                }
+
+                if (!combined || !combined.words || combined.sigBytes < 16) {
+                    throw new Error('Encrypted data is too short or invalid (missing IV)');
+                }
+
+                // Extract IV (first 16 bytes = 4 words)
+                const ivWords = combined.words.slice(0, 4);
+                const iv = CryptoJS.lib.WordArray.create(ivWords, 16);
+
+                // Extract ciphertext (remaining bytes)
+                const ciphertextWords = combined.words.slice(4);
+                const ciphertextBytes = combined.sigBytes - 16;
+                if (ciphertextBytes <= 0) {
+                    throw new Error('No ciphertext found after IV');
+                }
+                const ciphertext = CryptoJS.lib.WordArray.create(ciphertextWords, ciphertextBytes);
+
+                // Create CipherParams object
+                const cipherParams = CryptoJS.lib.CipherParams.create({
+                    ciphertext: ciphertext
+                });
+
+                // Decrypt with explicit IV
+                const decrypted = CryptoJS.AES.decrypt(cipherParams, key, {
+                    iv: iv,
+                    mode: CryptoJS.mode.CBC,
+                    padding: CryptoJS.pad.Pkcs7
+                });
+
+                const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+
+                if (!decryptedText) {
+                    throw new Error('Decryption failed. Wrong password or invalid encrypted data format.');
+                }
+
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = `<strong>Decrypted Value:</strong><br>${decryptedText}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = 'Decryption error: ' + error.message;
+                console.error('Decryption error details:', error);
+            }
+        }
+
+        // Load keys when page loads
+        loadKeys();
+
+        // Allow Enter key to trigger encrypt/decrypt
+        document.getElementById('encryptKeyInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                encryptValue();
+            }
+        });
+        document.getElementById('originalValueInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                encryptValue();
+            }
+        });
+        document.getElementById('decryptKeyInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                decryptValue();
+            }
+        });
+    </script>
+</body>
+
 </html>
