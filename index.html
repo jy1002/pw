@@ -28,9 +28,7 @@
             padding-bottom: 10px;
         }
 
-        .keys-section {
-            margin: 30px 0;
-        }
+        .keys-section { margin: 30px 0; }
 
         .key-list {
             background-color: #f9f9f9;
@@ -49,27 +47,14 @@
             border-left: 3px solid #4CAF50;
         }
 
-        .entry-name {
-            font-size: 15px;
-            color: #333;
-        }
+        .entry-name { font-size: 15px; color: #333; }
 
-        .input-section {
-            margin: 30px 0;
-        }
+        .input-section { margin: 30px 0; }
 
-        .input-group {
-            margin: 15px 0;
-        }
+        .input-group { margin: 15px 0; }
 
-        .input-row {
-            display: flex;
-            gap: 10px;
-        }
-
-        .input-row input {
-            flex: 1;
-        }
+        .input-row { display: flex; gap: 10px; }
+        .input-row > div { flex: 1; }
 
         label {
             display: block;
@@ -105,14 +90,8 @@
             margin-top: 10px;
         }
 
-        button:hover {
-            background-color: #45a049;
-        }
-
-        button:disabled {
-            background-color: #bbb;
-            cursor: not-allowed;
-        }
+        button:hover { background-color: #45a049; }
+        button:disabled { background-color: #bbb; cursor: not-allowed; }
 
         .btn-delete {
             background-color: #e74c3c;
@@ -120,26 +99,13 @@
             font-size: 13px;
             margin-top: 0;
         }
+        .btn-delete:hover { background-color: #c0392b; }
 
-        .btn-delete:hover {
-            background-color: #c0392b;
-        }
+        .btn-secondary { background-color: #3498db; }
+        .btn-secondary:hover { background-color: #2980b9; }
 
-        .btn-secondary {
-            background-color: #3498db;
-        }
-
-        .btn-secondary:hover {
-            background-color: #2980b9;
-        }
-
-        .btn-danger {
-            background-color: #e74c3c;
-        }
-
-        .btn-danger:hover {
-            background-color: #c0392b;
-        }
+        .btn-danger { background-color: #e74c3c; }
+        .btn-danger:hover { background-color: #c0392b; }
 
         .result {
             margin-top: 20px;
@@ -147,32 +113,9 @@
             border-radius: 5px;
             display: none;
         }
-
-        .result.success {
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-            display: block;
-        }
-
-        .result.error {
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-            display: block;
-        }
-
-        .result.info {
-            background-color: #d1ecf1;
-            border: 1px solid #bee5eb;
-            color: #0c5460;
-            display: block;
-        }
-
-        .loading {
-            color: #666;
-            font-style: italic;
-        }
+        .result.success { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; display: block; }
+        .result.error   { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; display: block; }
+        .result.info    { background-color: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; display: block; }
 
         .admin-unlock-row {
             display: flex;
@@ -180,44 +123,18 @@
             align-items: flex-end;
             margin-bottom: 15px;
         }
+        .admin-unlock-row input  { flex: 1; margin-bottom: 0; }
+        .admin-unlock-row button { margin-top: 0; white-space: nowrap; }
 
-        .admin-unlock-row input {
-            flex: 1;
-            margin-bottom: 0;
-        }
+        .admin-badge { color: #27ae60; font-weight: bold; font-size: 14px; margin-bottom: 10px; }
 
-        .admin-unlock-row button {
-            margin-top: 0;
-            white-space: nowrap;
-        }
+        .gh-status { font-size: 14px; margin-top: 8px; min-height: 20px; }
+        .gh-status.connected { color: #27ae60; font-weight: bold; }
+        .gh-status.error     { color: #e74c3c; }
 
-        .admin-badge {
-            color: #27ae60;
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
+        .section-divider { border: none; border-top: 1px solid #eee; margin: 30px 0; }
 
-        .gh-status {
-            font-size: 14px;
-            margin-top: 8px;
-            min-height: 20px;
-        }
-
-        .gh-status.connected {
-            color: #27ae60;
-            font-weight: bold;
-        }
-
-        .gh-status.error {
-            color: #e74c3c;
-        }
-
-        .section-divider {
-            border: none;
-            border-top: 1px solid #eee;
-            margin: 30px 0;
-        }
+        .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
     </style>
 </head>
 
@@ -229,7 +146,6 @@
         <div class="keys-section">
             <h2>Available Keys</h2>
 
-            <!-- Admin unlock (hidden when unlocked) -->
             <div id="adminLockPanel">
                 <div class="admin-unlock-row">
                     <input type="password" id="adminPwInput" placeholder="관리 비밀번호 입력">
@@ -238,7 +154,6 @@
                 <div id="adminUnlockResult" class="result"></div>
             </div>
 
-            <!-- Shown when unlocked -->
             <div id="adminBadge" class="admin-badge" style="display:none;">● 관리 모드 활성</div>
 
             <div id="keyList" class="key-list">
@@ -289,60 +204,114 @@
         <!-- GitHub Sync (관리 모드 시만 표시) -->
         <div id="githubSyncPanel" class="input-section" style="display:none;">
             <h2>GitHub Sync</h2>
-            <div class="input-group">
-                <label for="ghPat">GitHub Personal Access Token:</label>
-                <input type="password" id="ghPat" placeholder="github_pat_...">
-            </div>
-            <div class="input-group">
-                <div class="input-row">
-                    <div>
-                        <label for="ghOwner">Owner:</label>
-                        <input type="text" id="ghOwner" placeholder="username">
-                    </div>
-                    <div>
-                        <label for="ghRepo">Repo:</label>
-                        <input type="text" id="ghRepo" placeholder="repo-name">
-                    </div>
+
+            <!-- Token Setup (ENCRYPTED_TOKEN이 비어있을 때) -->
+            <div id="tokenSetupSection">
+                <p style="color:#888; font-size:14px;">토큰이 설정되지 않았습니다. PAT를 입력하여 코드에 암호화 저장하세요.</p>
+                <div class="input-group">
+                    <label for="setupPat">GitHub PAT:</label>
+                    <input type="password" id="setupPat" placeholder="github_pat_...">
                 </div>
+                <div class="input-group">
+                    <label for="setupTokenPw">토큰 비밀번호:</label>
+                    <input type="password" id="setupTokenPw" placeholder="토큰 암호화에 사용할 비밀번호">
+                </div>
+                <button onclick="setupToken()">Setup & Commit to Code</button>
+                <div id="tokenSetupResult" class="result"></div>
             </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                <button id="btnConnect" onclick="connectGitHub()">Connect</button>
-                <button id="btnDisconnect" class="btn-danger" onclick="clearGitHubSession()" style="display:none;">Disconnect</button>
-                <button id="btnCommit" class="btn-secondary" onclick="commitLogJson()" disabled>Commit to GitHub</button>
+
+            <!-- Normal connect (ENCRYPTED_TOKEN이 설정된 후) -->
+            <div id="tokenConnectSection" style="display:none;">
+                <div class="input-group">
+                    <label for="ghTokenPw">Token Password:</label>
+                    <input type="password" id="ghTokenPw" placeholder="토큰 비밀번호 입력">
+                </div>
+                <div class="btn-row">
+                    <button id="btnConnect" onclick="connectWithToken()">Connect</button>
+                    <button id="btnDisconnect" class="btn-danger" onclick="clearGitHubSession()" style="display:none;">Disconnect</button>
+                    <button id="btnCommit" class="btn-secondary" onclick="commitLogJson()" disabled>Commit to GitHub</button>
+                </div>
+                <div id="ghStatus" class="gh-status"></div>
             </div>
-            <div id="ghStatus" class="gh-status"></div>
         </div>
     </div>
 
     <script>
-        // SHA256 hash of the admin password (plaintext never stored in code)
-        const ADMIN_HASH = '58da99644f1c50486105f354ca6605532b4cff525802d7ff7f0146697643306e';
+        const ADMIN_SALT = 'pw-manager-salt-v1';
+        const ADMIN_KEY_HASH = '84c2e50e3c6eef42101a9bbb95bfffaebdd06faed1bfe8a17225b896e95332bc';
+        const PBKDF2_ITERATIONS = 100000;
+        const GH_OWNER = 'jy1002';
+        const GH_REPO = 'pw';
+        let ENCRYPTED_TOKEN = '';
 
         let logData = {};
         let githubSession = null;
 
-        // ─── Admin mode ───────────────────────────────────────────────
+        // ─── AES helpers ──────────────────────────────────────────────
 
-        function unlockAdmin() {
+        function aesEncrypt(plaintext, keyWordArray) {
+            const iv = CryptoJS.lib.WordArray.random(16);
+            const enc = CryptoJS.AES.encrypt(plaintext, keyWordArray, {
+                iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7
+            });
+            const combined = CryptoJS.lib.WordArray.create(
+                iv.words.concat(enc.ciphertext.words),
+                iv.sigBytes + enc.ciphertext.sigBytes
+            );
+            return CryptoJS.enc.Base64.stringify(combined);
+        }
+
+        function aesDecrypt(base64, keyWordArray) {
+            const combined = CryptoJS.enc.Base64.parse(base64);
+            if (!combined || combined.sigBytes < 16) throw new Error('Invalid data');
+            const iv = CryptoJS.lib.WordArray.create(combined.words.slice(0, 4), 16);
+            const ciphertext = CryptoJS.lib.WordArray.create(
+                combined.words.slice(4), combined.sigBytes - 16
+            );
+            const decrypted = CryptoJS.AES.decrypt(
+                CryptoJS.lib.CipherParams.create({ ciphertext }),
+                keyWordArray,
+                { iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }
+            );
+            const result = decrypted.toString(CryptoJS.enc.Utf8);
+            if (!result) throw new Error('Decryption failed');
+            return result;
+        }
+
+        // ─── UI helper ────────────────────────────────────────────────
+
+        function showResult(div, type, msg) {
+            div.className = `result ${type}`;
+            div.innerHTML = msg;
+        }
+
+        // ─── Admin unlock (PBKDF2) ────────────────────────────────────
+
+        async function unlockAdmin() {
             const input = document.getElementById('adminPwInput').value;
             const resultDiv = document.getElementById('adminUnlockResult');
 
-            if (!input) {
-                resultDiv.className = 'result error';
-                resultDiv.innerHTML = '비밀번호를 입력하세요';
-                return;
-            }
+            if (!input) { showResult(resultDiv, 'error', '비밀번호를 입력하세요'); return; }
 
-            const hash = CryptoJS.SHA256(input).toString();
-            if (hash === ADMIN_HASH) {
+            showResult(resultDiv, 'info', '검증 중...');
+            await new Promise(r => setTimeout(r, 20));
+
+            const derivedKey = CryptoJS.PBKDF2(input, ADMIN_SALT, {
+                keySize: 8, iterations: PBKDF2_ITERATIONS, hasher: CryptoJS.algo.SHA256
+            });
+            const verificationHash = CryptoJS.SHA256(derivedKey).toString();
+
+            if (verificationHash === ADMIN_KEY_HASH) {
                 sessionStorage.setItem('adminUnlocked', '1');
+                sessionStorage.setItem('adminKey', derivedKey.toString());
                 document.getElementById('adminPwInput').value = '';
                 resultDiv.className = 'result';
                 resultDiv.innerHTML = '';
                 renderAdminMode(true);
+                initGitHubSyncPanel();
+                restoreGitHubSession();
             } else {
-                resultDiv.className = 'result error';
-                resultDiv.innerHTML = '비밀번호가 올바르지 않습니다';
+                showResult(resultDiv, 'error', '비밀번호가 올바르지 않습니다');
             }
         }
 
@@ -388,6 +357,7 @@
                 logData = await response.json();
                 const isAdmin = sessionStorage.getItem('adminUnlocked') === '1';
                 renderAdminMode(isAdmin);
+                if (isAdmin) { initGitHubSyncPanel(); restoreGitHubSession(); }
             } catch (error) {
                 document.getElementById('keyList').innerHTML =
                     '<div class="result error">Error loading log.json: ' + error.message + '</div>';
@@ -405,31 +375,16 @@
             resultDiv.className = 'result';
             resultDiv.innerHTML = '';
 
-            if (!keyName) {
-                resultDiv.className = 'result error';
-                resultDiv.innerHTML = 'Please enter a key name';
-                return;
-            }
-            if (!encryptKey) {
-                resultDiv.className = 'result error';
-                resultDiv.innerHTML = 'Please enter an encryption key';
-                return;
-            }
-            if (!originalValue) {
-                resultDiv.className = 'result error';
-                resultDiv.innerHTML = 'Please enter an original value to encrypt';
-                return;
-            }
+            if (!keyName)        { showResult(resultDiv, 'error', 'Key Name을 입력하세요'); return; }
+            if (!encryptKey)     { showResult(resultDiv, 'error', 'Encrypt Key를 입력하세요'); return; }
+            if (!originalValue)  { showResult(resultDiv, 'error', '암호화할 값을 입력하세요'); return; }
 
             try {
                 const key = CryptoJS.SHA256(encryptKey);
                 const iv = CryptoJS.lib.WordArray.random(16);
                 const encrypted = CryptoJS.AES.encrypt(originalValue, key, {
-                    iv: iv,
-                    mode: CryptoJS.mode.CBC,
-                    padding: CryptoJS.pad.Pkcs7
+                    iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7
                 });
-
                 const combined = CryptoJS.lib.WordArray.create(
                     iv.words.concat(encrypted.ciphertext.words),
                     iv.sigBytes + encrypted.ciphertext.sigBytes
@@ -441,18 +396,15 @@
 
                 const isAdmin = sessionStorage.getItem('adminUnlocked') === '1';
                 const saveNote = isAdmin
-                    ? '관리 모드에서 <strong>Commit to GitHub</strong> 버튼으로 저장하세요.'
+                    ? '관리 모드에서 <strong>Commit to GitHub</strong>으로 저장하세요.'
                     : '저장하려면 관리 모드에서 GitHub Sync를 사용하세요.';
-
-                resultDiv.className = 'result success';
-                resultDiv.innerHTML = `<strong>Encrypted:</strong> ${keyName}<br><small>${saveNote}</small>`;
+                showResult(resultDiv, 'success', `<strong>Encrypted:</strong> ${keyName}<br><small>${saveNote}</small>`);
 
                 document.getElementById('encryptKeyNameInput').value = '';
                 document.getElementById('encryptKeyInput').value = '';
                 document.getElementById('originalValueInput').value = '';
             } catch (error) {
-                resultDiv.className = 'result error';
-                resultDiv.innerHTML = 'Encryption error: ' + error.message;
+                showResult(resultDiv, 'error', 'Encryption error: ' + error.message);
             }
         }
 
@@ -466,99 +418,157 @@
             resultDiv.className = 'result';
             resultDiv.innerHTML = '';
 
-            if (!keyName) {
-                resultDiv.className = 'result error';
-                resultDiv.innerHTML = 'Please enter a key name';
-                return;
-            }
-            if (!decryptKey) {
-                resultDiv.className = 'result error';
-                resultDiv.innerHTML = 'Please enter a decryption key';
-                return;
-            }
+            if (!keyName)    { showResult(resultDiv, 'error', 'Key Name을 입력하세요'); return; }
+            if (!decryptKey) { showResult(resultDiv, 'error', 'Decrypt Key를 입력하세요'); return; }
             if (!logData.hasOwnProperty(keyName)) {
-                resultDiv.className = 'result error';
-                resultDiv.innerHTML = `Key "${keyName}" not found`;
+                showResult(resultDiv, 'error', `"${keyName}" 키를 찾을 수 없습니다`);
                 return;
             }
 
             try {
                 const encryptedValue = logData[keyName];
-                if (!encryptedValue || typeof encryptedValue !== 'string') {
-                    throw new Error('Invalid encrypted value format');
-                }
-
                 const key = CryptoJS.SHA256(decryptKey);
                 const combined = CryptoJS.enc.Base64.parse(encryptedValue);
 
-                if (!combined || !combined.words || combined.sigBytes < 16) {
-                    throw new Error('Encrypted data is too short or invalid');
-                }
+                if (!combined || combined.sigBytes < 16) throw new Error('Invalid encrypted data');
 
                 const iv = CryptoJS.lib.WordArray.create(combined.words.slice(0, 4), 16);
-                const ciphertextBytes = combined.sigBytes - 16;
-                if (ciphertextBytes <= 0) throw new Error('No ciphertext found after IV');
-
-                const ciphertext = CryptoJS.lib.WordArray.create(combined.words.slice(4), ciphertextBytes);
-                const cipherParams = CryptoJS.lib.CipherParams.create({ ciphertext });
-
-                const decrypted = CryptoJS.AES.decrypt(cipherParams, key, {
-                    iv,
-                    mode: CryptoJS.mode.CBC,
-                    padding: CryptoJS.pad.Pkcs7
-                });
+                const ciphertext = CryptoJS.lib.WordArray.create(
+                    combined.words.slice(4), combined.sigBytes - 16
+                );
+                const decrypted = CryptoJS.AES.decrypt(
+                    CryptoJS.lib.CipherParams.create({ ciphertext }),
+                    key, { iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }
+                );
 
                 const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
-                if (!decryptedText) throw new Error('Decryption failed. Wrong password or invalid data.');
+                if (!decryptedText) throw new Error('Wrong password or invalid data');
 
-                resultDiv.className = 'result success';
-                resultDiv.innerHTML = `<strong>Decrypted:</strong> ${decryptedText}`;
+                showResult(resultDiv, 'success', `<strong>Decrypted:</strong> ${decryptedText}`);
             } catch (error) {
-                resultDiv.className = 'result error';
-                resultDiv.innerHTML = 'Decryption error: ' + error.message;
+                showResult(resultDiv, 'error', 'Decryption error: ' + error.message);
             }
         }
 
-        // ─── GitHub Sync ──────────────────────────────────────────────
+        // ─── GitHub Sync panel ────────────────────────────────────────
 
-        async function connectGitHub() {
-            const pat = document.getElementById('ghPat').value.trim();
-            const owner = document.getElementById('ghOwner').value.trim();
-            const repo = document.getElementById('ghRepo').value.trim();
+        function initGitHubSyncPanel() {
+            const hasToken = ENCRYPTED_TOKEN !== '';
+            document.getElementById('tokenSetupSection').style.display = hasToken ? 'none' : 'block';
+            document.getElementById('tokenConnectSection').style.display = hasToken ? 'block' : 'none';
+        }
+
+        // Token Setup: PAT를 2중 암호화 후 index.html에 커밋
+        async function setupToken() {
+            const pat = document.getElementById('setupPat').value.trim();
+            const tokenPw = document.getElementById('setupTokenPw').value;
+            const adminKeyHex = sessionStorage.getItem('adminKey');
+            const resultDiv = document.getElementById('tokenSetupResult');
+
+            if (!pat || !tokenPw) { showResult(resultDiv, 'error', 'PAT와 토큰 비밀번호를 입력하세요'); return; }
+            if (!adminKeyHex)     { showResult(resultDiv, 'error', '관리 모드에서 다시 잠금 해제하세요'); return; }
+
+            showResult(resultDiv, 'info', '암호화 중...');
+            await new Promise(r => setTimeout(r, 20));
+
+            try {
+                const adminKey = CryptoJS.enc.Hex.parse(adminKeyHex);
+                const tokenKey = CryptoJS.SHA256(tokenPw);
+
+                const cipher1 = aesEncrypt(pat, adminKey);      // layer 1: admin key
+                const cipher2 = aesEncrypt(cipher1, tokenKey);  // layer 2: token password
+
+                showResult(resultDiv, 'info', 'index.html 업데이트 중...');
+                await commitTokenToCode(cipher2, pat);
+
+                showResult(resultDiv, 'success', '토큰 저장 완료. 페이지를 새로고침하세요.');
+                document.getElementById('setupPat').value = '';
+                document.getElementById('setupTokenPw').value = '';
+            } catch (e) {
+                showResult(resultDiv, 'error', e.message);
+            }
+        }
+
+        async function commitTokenToCode(encryptedToken, pat) {
+            const res = await fetch(
+                `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/index.html`,
+                { headers: { Authorization: `Bearer ${pat}`, Accept: 'application/vnd.github+json' } }
+            );
+            if (res.status === 401 || res.status === 403) throw new Error('토큰 권한 오류 (Contents: read+write 필요)');
+            if (!res.ok) throw new Error(`GitHub API 오류: ${res.status}`);
+
+            const data = await res.json();
+            const currentContent = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
+            const updatedContent = currentContent.replace(
+                /let ENCRYPTED_TOKEN = '.*?';/,
+                `let ENCRYPTED_TOKEN = '${encryptedToken}';`
+            );
+
+            const putRes = await fetch(
+                `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/index.html`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        Authorization: `Bearer ${pat}`,
+                        Accept: 'application/vnd.github+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Set encrypted token',
+                        content: btoa(unescape(encodeURIComponent(updatedContent))),
+                        sha: data.sha
+                    })
+                }
+            );
+            if (!putRes.ok) throw new Error(`Commit 실패: ${putRes.status}`);
+        }
+
+        // Token Connect: 토큰 비밀번호로 PAT 복호화 후 자동 연결
+        async function connectWithToken() {
+            const tokenPw = document.getElementById('ghTokenPw').value;
+            const adminKeyHex = sessionStorage.getItem('adminKey');
             const statusDiv = document.getElementById('ghStatus');
 
-            if (!pat || !owner || !repo) {
+            if (!tokenPw)    { statusDiv.className = 'gh-status error'; statusDiv.textContent = '토큰 비밀번호를 입력하세요'; return; }
+            if (!adminKeyHex){ statusDiv.className = 'gh-status error'; statusDiv.textContent = '관리 모드에서 다시 잠금 해제하세요'; return; }
+
+            statusDiv.className = 'gh-status';
+            statusDiv.textContent = '복호화 중...';
+            await new Promise(r => setTimeout(r, 20));
+
+            let pat;
+            try {
+                const adminKey = CryptoJS.enc.Hex.parse(adminKeyHex);
+                const tokenKey = CryptoJS.SHA256(tokenPw);
+                const cipher1 = aesDecrypt(ENCRYPTED_TOKEN, tokenKey);  // remove layer 2
+                pat = aesDecrypt(cipher1, adminKey);                     // remove layer 1
+            } catch (_) {
                 statusDiv.className = 'gh-status error';
-                statusDiv.textContent = 'PAT, Owner, Repo를 모두 입력하세요.';
+                statusDiv.textContent = '토큰 비밀번호가 올바르지 않습니다';
                 return;
             }
 
-            statusDiv.className = 'gh-status';
             statusDiv.textContent = '연결 중...';
-
             try {
                 const res = await fetch(
-                    `https://api.github.com/repos/${owner}/${repo}/contents/log.json`,
+                    `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/log.json`,
                     { headers: { Authorization: `Bearer ${pat}`, Accept: 'application/vnd.github+json' } }
                 );
-
-                if (res.status === 401 || res.status === 403) {
-                    throw new Error('토큰 권한 오류 (fine-grained PAT: Contents read+write 필요)');
-                }
+                if (res.status === 401 || res.status === 403) throw new Error('토큰 권한 오류');
                 if (!res.ok) throw new Error(`GitHub API 오류: ${res.status}`);
 
                 const data = await res.json();
-                githubSession = { pat, owner, repo, sha: data.sha };
+                githubSession = { pat, owner: GH_OWNER, repo: GH_REPO, sha: data.sha };
                 sessionStorage.setItem('ghSession', JSON.stringify(githubSession));
 
                 document.getElementById('btnConnect').style.display = 'none';
                 document.getElementById('btnDisconnect').style.display = 'inline-block';
                 document.getElementById('btnCommit').disabled = false;
                 statusDiv.className = 'gh-status connected';
-                statusDiv.textContent = `● Connected — ${owner}/${repo}`;
-            } catch (error) {
+                statusDiv.textContent = `● Connected — ${GH_OWNER}/${GH_REPO}`;
+            } catch (e) {
                 statusDiv.className = 'gh-status error';
-                statusDiv.textContent = error.message;
+                statusDiv.textContent = e.message;
             }
         }
 
@@ -587,12 +597,8 @@
                     }
                 );
 
-                if (res.status === 409) {
-                    throw new Error('Conflict: 원격 파일이 변경됨. Disconnect 후 재연결하세요.');
-                }
-                if (res.status === 401 || res.status === 403) {
-                    throw new Error('토큰 권한 오류');
-                }
+                if (res.status === 409) throw new Error('Conflict: 재연결 후 다시 시도하세요');
+                if (res.status === 401 || res.status === 403) throw new Error('토큰 권한 오류');
                 if (!res.ok) throw new Error(`GitHub API 오류: ${res.status}`);
 
                 const data = await res.json();
@@ -601,16 +607,16 @@
 
                 statusDiv.className = 'gh-status connected';
                 statusDiv.textContent = `● Committed: ${data.content.sha.slice(0, 7)}`;
-            } catch (error) {
+            } catch (e) {
                 statusDiv.className = 'gh-status error';
-                statusDiv.textContent = error.message;
+                statusDiv.textContent = e.message;
             }
         }
 
         function clearGitHubSession() {
             sessionStorage.removeItem('ghSession');
             githubSession = null;
-            document.getElementById('ghPat').value = '';
+            document.getElementById('ghTokenPw').value = '';
             document.getElementById('btnConnect').style.display = 'inline-block';
             document.getElementById('btnDisconnect').style.display = 'none';
             document.getElementById('btnCommit').disabled = true;
@@ -624,14 +630,12 @@
             if (!saved) return;
             try {
                 githubSession = JSON.parse(saved);
-                document.getElementById('ghOwner').value = githubSession.owner;
-                document.getElementById('ghRepo').value = githubSession.repo;
                 document.getElementById('btnConnect').style.display = 'none';
                 document.getElementById('btnDisconnect').style.display = 'inline-block';
                 document.getElementById('btnCommit').disabled = false;
                 const statusDiv = document.getElementById('ghStatus');
                 statusDiv.className = 'gh-status connected';
-                statusDiv.textContent = `● Connected — ${githubSession.owner}/${githubSession.repo}`;
+                statusDiv.textContent = `● Connected — ${GH_OWNER}/${GH_REPO}`;
             } catch (_) {
                 sessionStorage.removeItem('ghSession');
             }
@@ -639,25 +643,13 @@
 
         // ─── Init ─────────────────────────────────────────────────────
 
-        loadKeys().then(() => {
-            if (sessionStorage.getItem('adminUnlocked') === '1') {
-                restoreGitHubSession();
-            }
-        });
+        loadKeys();
 
-        // Enter key shortcuts
-        document.getElementById('adminPwInput').addEventListener('keypress', e => {
-            if (e.key === 'Enter') unlockAdmin();
-        });
-        document.getElementById('encryptKeyInput').addEventListener('keypress', e => {
-            if (e.key === 'Enter') encryptValue();
-        });
-        document.getElementById('originalValueInput').addEventListener('keypress', e => {
-            if (e.key === 'Enter') encryptValue();
-        });
-        document.getElementById('decryptKeyInput').addEventListener('keypress', e => {
-            if (e.key === 'Enter') decryptValue();
-        });
+        document.getElementById('adminPwInput').addEventListener('keypress', e => { if (e.key === 'Enter') unlockAdmin(); });
+        document.getElementById('encryptKeyInput').addEventListener('keypress', e => { if (e.key === 'Enter') encryptValue(); });
+        document.getElementById('originalValueInput').addEventListener('keypress', e => { if (e.key === 'Enter') encryptValue(); });
+        document.getElementById('decryptKeyInput').addEventListener('keypress', e => { if (e.key === 'Enter') decryptValue(); });
+        document.getElementById('ghTokenPw').addEventListener('keypress', e => { if (e.key === 'Enter') connectWithToken(); });
     </script>
 </body>
 
